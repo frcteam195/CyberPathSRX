@@ -527,7 +527,7 @@ function importData() {
             // console.log(jd);
             waypoints = []
             $("tbody#points").empty();
-            jd.forEach((wpd) => {
+            jd.forEach((wpd, i) => {
                 let wp = new Waypoint(new Translation2d(wpd.position.x, wpd.position.y), radians2degrees(wpd.theta), wpd.comment);
                 // console.log(wp);
                 $("tbody#points").append("<tr>"
@@ -535,7 +535,7 @@ function importData() {
                     + "<td><input value='" + wp.position.y + "'></td>"
                     + "<td><input value='" + radians2degrees(wpd.theta) + "'></td>"
                     + "<td class='comments'><input placeholder='Comments' value='" + wp.comment + "'></td>"
-                    + "<td><button onclick='$(this).parent().parent().remove();update();''>Delete</button></td></tr>"
+                    + (i == 0 ? "" : "<td><button onclick='$(this).parent().parent().remove();update();''>Delete</button></td></tr>")
                 );
             })
             update();
