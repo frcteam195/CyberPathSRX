@@ -49,6 +49,7 @@ var Spline = (function () {
         if (Spline.almostEqual(Math.abs(theta0_hat), Math.PI / 2) || Spline.almostEqual(Math.abs(theta1_hat), Math.PI / 2)) {
             return false;
         }
+        //TODO: Fix this code so that you can go more than 90deg
         if (Math.abs(ChezyMath.getDifferenceInAngleRadians(theta0_hat, theta1_hat)) >= Math.PI / 2) {
             return false;
         }
@@ -161,11 +162,13 @@ var Spline = (function () {
         return ypp_hat;
     };
     Spline.prototype.angleAt = function (percentage) {
-        var angle = ChezyMath.boundAngle0to2PiRadians(Math.atan(this.derivativeAt(percentage)) + this.theta_offset_);
+        //Removed bounding to fix angle issue - previously bounded 0 to 2pi
+        var angle = Math.atan(this.derivativeAt(percentage)) + this.theta_offset_;
         return angle;
     };
     Spline.prototype.angleChangeAt = function (percentage) {
-        return ChezyMath.boundAngleNegPiToPiRadians(Math.atan(this.secondDerivativeAt(percentage)));
+        //Removed bounding to fix angle issue - previously bounded -pi to pi
+        return Math.atan(this.secondDerivativeAt(percentage));
     };
     Spline.prototype.toString = function () {
         return "a=" + this.a_ + "; b=" + this.b_ + "; c=" + this.c_ + "; d=" + this.d_ + "; e=" + this.e_;
@@ -863,7 +866,10 @@ var Path = (function () {
         return (this.go_left_ ? this.go_left_pair_.left : this.go_left_pair_.right);
     };
     Path.prototype.getCenterTrajectory = function () {
-        return this.go_left_pair_.center;
+        if (this.go_left_pair_ != null)
+            return this.go_left_pair_.center;
+        else
+            return null;
     };
     Path.prototype.getRightWheelTrajectory = function () {
         return (this.go_left_ ? this.go_left_pair_.right : this.go_left_pair_.left);
@@ -872,8 +878,8 @@ var Path = (function () {
         return this.go_left_pair_;
     };
     Path.prototype.getEndHeading = function () {
-        var numSegments = this.getLeftWheelTrajectory().getNumSegments();
-        var lastSegment = this.getLeftWheelTrajectory().getSegment(numSegments - 1);
+        var numSegments = this.getCenterTrajectory().getNumSegments();
+        var lastSegment = this.getCenterTrajectory().getSegment(numSegments - 1);
         return lastSegment.heading;
     };
     Path.prototype.reverse = function () {
@@ -1005,7 +1011,7 @@ var PathGenerator = (function () {
             total_distance += spline_lengths[i];
         }
         ;
-        var traj = TrajectoryGenerator.generate(config, TrajectoryGenerator.SCurvesStrategy_$LI$(), 0.0, path.getWaypoint(0).theta, total_distance, 0.0, path.getWaypoint(0).theta);
+        var traj = TrajectoryGenerator.generate(config, TrajectoryGenerator.SCurvesStrategy_$LI$(), 0.0, path.getWaypoint(0).theta, total_distance, 0.0, path.getWaypoint(path.getNumWaypoints() - 1).theta);
         var cur_spline = 0;
         var cur_spline_start_pos = 0;
         var length_of_splines_finished = 0;
@@ -1049,38 +1055,41 @@ var PathGenerator = (function () {
      * @return {Trajectory.Pair} [0] is left, [1] is right
      */
     PathGenerator.makeLeftAndRightTrajectories = function (input, wheelbase_width) {
-        var output = new Array(2);
-        output[0] = input.copy();
-        output[1] = input.copy();
-        var left = output[0];
-        var right = output[1];
-        for (var i = 0; i < input.getNumSegments(); ++i) {
-            var current = input.getSegment(i);
-            var cos_angle = Math.cos(current.heading);
-            var sin_angle = Math.sin(current.heading);
-            var s_left = left.getSegment(i);
-            s_left.x = current.x - wheelbase_width / 2 * sin_angle;
-            s_left.y = current.y + wheelbase_width / 2 * cos_angle;
-            if (i > 0) {
-                var dist = Math.sqrt((s_left.x - left.getSegment(i - 1).x) * (s_left.x - left.getSegment(i - 1).x) + (s_left.y - left.getSegment(i - 1).y) * (s_left.y - left.getSegment(i - 1).y));
-                s_left.pos = left.getSegment(i - 1).pos + dist;
-                s_left.vel = dist / s_left.dt;
-                s_left.acc = (s_left.vel - left.getSegment(i - 1).vel) / s_left.dt;
-                s_left.jerk = (s_left.acc - left.getSegment(i - 1).acc) / s_left.dt;
+        if (input != null) {
+            var output = new Array(2);
+            output[0] = input.copy();
+            output[1] = input.copy();
+            var left = output[0];
+            var right = output[1];
+            for (var i = 0; i < input.getNumSegments(); ++i) {
+                var current = input.getSegment(i);
+                var cos_angle = Math.cos(current.heading);
+                var sin_angle = Math.sin(current.heading);
+                var s_left = left.getSegment(i);
+                s_left.x = current.x - wheelbase_width / 2 * sin_angle;
+                s_left.y = current.y + wheelbase_width / 2 * cos_angle;
+                if (i > 0) {
+                    var dist = Math.sqrt((s_left.x - left.getSegment(i - 1).x) * (s_left.x - left.getSegment(i - 1).x) + (s_left.y - left.getSegment(i - 1).y) * (s_left.y - left.getSegment(i - 1).y));
+                    s_left.pos = left.getSegment(i - 1).pos + dist;
+                    s_left.vel = dist / s_left.dt;
+                    s_left.acc = (s_left.vel - left.getSegment(i - 1).vel) / s_left.dt;
+                    s_left.jerk = (s_left.acc - left.getSegment(i - 1).acc) / s_left.dt;
+                }
+                var s_right = right.getSegment(i);
+                s_right.x = current.x + wheelbase_width / 2 * sin_angle;
+                s_right.y = current.y - wheelbase_width / 2 * cos_angle;
+                if (i > 0) {
+                    var dist = Math.sqrt((s_right.x - right.getSegment(i - 1).x) * (s_right.x - right.getSegment(i - 1).x) + (s_right.y - right.getSegment(i - 1).y) * (s_right.y - right.getSegment(i - 1).y));
+                    s_right.pos = right.getSegment(i - 1).pos + dist;
+                    s_right.vel = dist / s_right.dt;
+                    s_right.acc = (s_right.vel - right.getSegment(i - 1).vel) / s_right.dt;
+                    s_right.jerk = (s_right.acc - right.getSegment(i - 1).acc) / s_right.dt;
+                }
             }
-            var s_right = right.getSegment(i);
-            s_right.x = current.x + wheelbase_width / 2 * sin_angle;
-            s_right.y = current.y - wheelbase_width / 2 * cos_angle;
-            if (i > 0) {
-                var dist = Math.sqrt((s_right.x - right.getSegment(i - 1).x) * (s_right.x - right.getSegment(i - 1).x) + (s_right.y - right.getSegment(i - 1).y) * (s_right.y - right.getSegment(i - 1).y));
-                s_right.pos = right.getSegment(i - 1).pos + dist;
-                s_right.vel = dist / s_right.dt;
-                s_right.acc = (s_right.vel - right.getSegment(i - 1).vel) / s_right.dt;
-                s_right.jerk = (s_right.acc - right.getSegment(i - 1).acc) / s_right.dt;
-            }
-        }
-        ;
-        return new Trajectory.Pair(output[0], output[1], input.copy());
+            ;
+            return new Trajectory.Pair(output[0], output[1], input.copy());
+        } else
+            return null;
     };
     return PathGenerator;
 }());

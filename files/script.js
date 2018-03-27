@@ -94,8 +94,11 @@ class Translation2d {
         ctx.stroke();
     }
 
-    point() {
-        ctx.fillRect(this.drawX, this.drawY, 2, 2);
+    point(rectWidthHeight) {
+        if (rectWidthHeight == null)
+            rectWidthHeight = 10;
+
+        ctx.fillRect(this.drawX - rectWidthHeight/2.0, this.drawY - rectWidthHeight/2.0, rectWidthHeight, rectWidthHeight);
     }
 
     get drawX() {
@@ -171,6 +174,7 @@ class Line {
         ctx.stroke();
         this.pointA.draw();
         this.pointB.draw();
+
     }
 
     fill() {
@@ -356,13 +360,15 @@ function addPoint(x, y) {
 function degrees2radians(deg) {
     //Using numerical approximation for conversions instead of the * 180/Math.PI allows
     //entering of 90deg value in theta on the web interface (to help simplify entry)
-    return deg / 57.297469362;
+    // return deg / 57.297469362;
+    return deg * (Math.PI / 180);
 }
 
 function radians2degrees(rad) {
     //Using numerical approximation for conversions instead of the * 180/Math.PI allows
     //entering of 90deg value in theta on the web interface (to help simplify entry)
-    return rad * 57.297469362;
+    // return rad * 57.297469362;
+    return rad * (180 / Math.PI);
 }
 
 function update() {
@@ -372,7 +378,7 @@ function update() {
     eachPoint(function (x, y, theta, comment) {
         var pos = new Translation2d(x, y);
         waypoints.push(new Waypoint(pos, theta, comment));
-        drawRotatedRect(pos, robotHeight, robotWidth, -theta, getColorForSpeed(10));
+        drawRotatedRect(pos, robotHeight, robotWidth, -theta, getColorForSpeed(10), "rgba(0,0,0,0)", false);
         points.addWaypoint(new WaypointSequence.Waypoint(x, y, theta));
     });
     config = new TrajectoryGenerator.Config();
@@ -381,9 +387,23 @@ function update() {
     config.max_acc = parseFloat($("td.max_acc input").val());
     config.max_jerk = parseFloat($("td.max_jerk input").val());
 
+
     if (points.getNumWaypoints() > 1) {
         path = PathGenerator.makePath(points, config, wheelbaseWidth, "Curve");
-        drawPath();
+        if (path == null || path.getCenterTrajectory() == null) {
+            ctx.beginPath();
+            ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+            var rectMaxWidth = 1000;
+            ctx.fillRect(ctx.canvas.width/2.0 - rectMaxWidth/2, 25,  rectMaxWidth, 50);
+            ctx.fillStyle = "#9327ff";
+            ctx.font = "30px Arial";
+            var maxWidth = 900;
+            ctx.fillText("Solution not possible! Ensure that your angle difference between points is less than 90!", ctx.canvas.width/2.0 - maxWidth/2, 60, maxWidth);
+            ctx.fill();
+            return null;
+        }
+        else
+            drawPath();
         $("td.time").text("" + (path.getCenterTrajectory().getNumSegments() * config.dt).toFixed(3));
     } else {
         $("td.time").text("0");
@@ -413,29 +433,38 @@ function drawPath() {
     ctx.fillStyle = color;
     ctx.strokeStyle = color;
 
-    eachTimeSlice(function (left, right) {
-        ctx.fillStyle = getColorForSpeed(left.vel);
-        ctx.strokeStyle = getColorForSpeed(left.vel);
-        (new Translation2d(left.x, left.y)).point();
-        ctx.fillStyle = getColorForSpeed(right.vel);
-        ctx.strokeStyle = getColorForSpeed(right.vel);
-        (new Translation2d(right.x, right.y)).point();
+    eachTimeSlice(function (left, right, i, center) {
+        ctx.fillStyle = getColorForSpeed(center.vel);
+        ctx.strokeStyle = getColorForSpeed(center.vel);
+        var t2d = new Translation2d(center.x, center.y);
+        t2d.point();
+
+        let alpha = 0.3;
+        ctx.fillStyle = hexToRgbA(getColorForSpeed(left.vel), alpha);
+        ctx.strokeStyle = hexToRgbA(getColorForSpeed(left.vel), alpha);
+        (new Translation2d(left.x, left.y)).point(3);
+
+        ctx.fillStyle = hexToRgbA(getColorForSpeed(right.vel), alpha);
+        ctx.strokeStyle = hexToRgbA(getColorForSpeed(right.vel), alpha);
+        (new Translation2d(right.x, right.y)).point(3);
     });
 
     ctx.fill();
-    ctx.lineWidth = 0;
+    ctx.lineWidth = 4;
     ctx.stroke();
 }
 
 function eachTimeSlice(func) {
     var pair = path.getPair();
-    var lpoints = pair.left.segments_;
-    var cpoints = pair.center.segments_;
-    var rpoints = pair.right.segments_;
-    var count = cpoints.length;
+    if (pair != null) {
+        var lpoints = pair.left.segments_;
+        var cpoints = pair.center.segments_;
+        var rpoints = pair.right.segments_;
+        var count = cpoints.length;
 
-    for (var i = 0; i < count; ++i) {
-        func(lpoints[i], rpoints[i], i, cpoints[i]);
+        for (var i = 0; i < count; ++i) {
+            func(lpoints[i], rpoints[i], i, cpoints[i]);
+        }
     }
 }
 
@@ -486,12 +515,12 @@ function drawRotatedRect(pos, w, h, angle, strokeColor, fillColor, noFill) {
 function drawPoints() {
     var i = 0;
     ctx.beginPath();
-    do {
-        var a = Arc.fromPoints(getPoint(i), getPoint(i + 1), getPoint(i + 2));
-        a.fill();
-        i++;
-    } while (i < waypoints.length - 2);
-    ctx.fill();
+    // do {
+    //     var a = Arc.fromPoints(getPoint(i), getPoint(i + 1), getPoint(i + 2));
+    //     a.fill();
+    //     i++;
+    // } while (i < waypoints.length - 2);
+    // ctx.fill();
     i = 0;
     do {
         var a = Arc.fromPoints(getPoint(i), getPoint(i + 1), getPoint(i + 2));
@@ -688,6 +717,21 @@ function getColorForSpeed(speed) {
         return RGBToHex(lerpColor(minSpeedColor, [255, 255, 0], u * 2));
     return RGBToHex(lerpColor([255, 255, 0], maxSpeedColor, u * 2 - 1));
 
+}
+
+function hexToRgbA(hex, alpha){
+    if (alpha == null)
+        alpha = 1;
+    var c;
+    if(/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)){
+        c= hex.substring(1).split('');
+        if(c.length== 3){
+            c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+        }
+        c= '0x'+c.join('');
+        return 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+','+alpha+')';
+    }
+    throw new Error('Bad Hex');
 }
 
 function hexToRGB(hex) {
