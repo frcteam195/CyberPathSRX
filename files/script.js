@@ -336,7 +336,21 @@ function addPoint(x, y) {
 
     x = Math.round(x);
     y = Math.round(y);
-    theta = Math.round(radians2degrees(Math.atan2(y - prev.y, x - prev.x)));
+
+    //Do correction for angle offset based on starting point
+    var angleOffset = 0;
+    if (waypoints.length > 1) {
+        if (waypoints[1].position.x < waypoints[0].position.x) {
+            angleOffset = -Math.PI;
+        }
+    } else if (waypoints.length > 0) {
+        if (x < waypoints[0].position.x) {
+            angleOffset = -Math.PI;
+        }
+    }
+    //Auto heading calc - only used as an estimate, points should be adjusted by hand
+    theta = Math.round(radians2degrees(ChezyMath.boundAngleNegPiToPiRadians(Math.atan2((y - prev.y),(x - prev.x)) + angleOffset)));
+
 
     $("tbody#points").append("<tr>"
         + "<td><input value='" + (x) + "'></td>"
@@ -348,7 +362,7 @@ function addPoint(x, y) {
     update();
     $('input').unbind("change paste keyup");
     $('input').bind("change paste keyup", function () {
-        console.log("change");
+        // console.log("change");
         clearTimeout(wto);
         wto = setTimeout(function () {
             update();
@@ -380,13 +394,22 @@ function update() {
     wheelbaseWidth = parseFloat($("td.wheelbasewidth input").val());
     wheelDiameter = parseFloat($("td.wheeldiameter input").val());
 
+    // var angleOffset = 0;
+    // if ($("tbody#points tr").length > 1)
+    //     if (parseInt($($($($("tbody#points tr")[1]).children()).children()[0]).val()) < parseInt($($($($("tbody#points tr")[0]).children()).children()[0]).val())) {
+    //         angleOffset = -Math.PI;
+    //         console.log("neg angle detected");
+    //     }
+
     points = new WaypointSequence($("tbody#points tr").length);
     eachPoint(function (x, y, theta, comment) {
+        theta = theta;
         var pos = new Translation2d(x, y);
         waypoints.push(new Waypoint(pos, theta, comment));
         drawRotatedRect(pos, robotHeight, robotWidth, -theta, getColorForSpeed(10), "rgba(0,0,0,0)", false);
         points.addWaypoint(new WaypointSequence.Waypoint(x, y, theta));
     });
+
     config = new TrajectoryGenerator.Config();
     config.dt = parseFloat($("td.dt input").val());
     config.max_vel = parseFloat($("td.max_vel input").val());
@@ -604,7 +627,13 @@ function getDataString() {
     var continuousHeading = 0;
 
     eachTimeSlice(function (left, right, i, center) {
-        var nextHeading = radians2degrees(center.heading);
+        var angleOffset = 0;
+        if (waypoints.length > 1)
+            if (waypoints[1].position.x < waypoints[0].position.x) {
+                angleOffset = -Math.PI;
+            }
+
+        var nextHeading = radians2degrees(center.heading > 0 ? center.heading + angleOffset : center.heading - angleOffset);
         if (i != 0) {
             var headingDifference = nextHeading - lastHeading;
             if (headingDifference >= 300) {
