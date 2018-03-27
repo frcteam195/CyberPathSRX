@@ -360,15 +360,15 @@ function addPoint(x, y) {
 function degrees2radians(deg) {
     //Using numerical approximation for conversions instead of the * 180/Math.PI allows
     //entering of 90deg value in theta on the web interface (to help simplify entry)
-    // return deg / 57.297469362;
-    return deg * (Math.PI / 180);
+    return deg / 57.297469362;
+    // return deg * (Math.PI / 180);
 }
 
 function radians2degrees(rad) {
     //Using numerical approximation for conversions instead of the * 180/Math.PI allows
     //entering of 90deg value in theta on the web interface (to help simplify entry)
-    // return rad * 57.297469362;
-    return rad * (180 / Math.PI);
+    return rad * 57.297469362;
+    // return rad * (180 / Math.PI);
 }
 
 function update() {
