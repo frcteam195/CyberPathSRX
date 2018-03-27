@@ -492,8 +492,12 @@ function eachTimeSlice(func) {
         var rpoints = pair.right.segments_;
         var count = cpoints.length;
 
+        var lastPoint = false;
         for (var i = 0; i < count; ++i) {
-            func(lpoints[i], rpoints[i], i, cpoints[i]);
+            if (i == count -1)
+                lastPoint = true;
+
+            func(lpoints[i], rpoints[i], i, cpoints[i], lastPoint);
         }
     }
 }
@@ -626,7 +630,7 @@ function getDataString() {
     var lastHeading = 0;
     var continuousHeading = 0;
 
-    eachTimeSlice(function (left, right, i, center) {
+    eachTimeSlice(function (left, right, i, center, lastPoint) {
         var angleOffset = 0;
         if (waypoints.length > 1)
             if (waypoints[1].position.x < waypoints[0].position.x) {
@@ -645,8 +649,12 @@ function getDataString() {
         }
 
         lastHeading = continuousHeading;
+        var segment = ``;
+        if (lastPoint)
+            segment = `		{${((isReversed ? -1 : 1) * convertInchesToNativeUnits(center.pos)).toFixed(3)}, ${((isReversed ? -1 : 1) * convertIpstoTicksPer100ms(center.vel)).toFixed(3)}, ${(left.dt * 1000.0).toFixed(3)}, ${continuousHeading.toFixed(3)}}\n`;
+        else
+            segment = `		{${((isReversed ? -1 : 1) * convertInchesToNativeUnits(center.pos)).toFixed(3)}, ${((isReversed ? -1 : 1) * convertIpstoTicksPer100ms(center.vel)).toFixed(3)}, ${(left.dt * 1000.0).toFixed(3)}, ${continuousHeading.toFixed(3)}},\n`;
 
-        var segment = `		{${((isReversed ? -1 : 1) * convertInchesToNativeUnits(center.pos)).toFixed(3)}, ${((isReversed ? -1 : 1) * convertIpstoTicksPer100ms(center.vel)).toFixed(3)}, ${(left.dt * 1000.0).toFixed(3)}, ${continuousHeading.toFixed(3)}}\n`;
         set_segments += segment;
     });
 
