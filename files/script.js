@@ -227,8 +227,8 @@ class Arc {
     draw() {
         var sTrans = Translation2d.diff(this.center, this.lineA.end);
         var eTrans = Translation2d.diff(this.center, this.lineB.start);
-        console.log(sTrans);
-        console.log(eTrans);
+        // console.log(sTrans);
+        // console.log(eTrans);
         var sAngle, eAngle;
         if (Translation2d.cross(sTrans, eTrans) > 0) {
             eAngle = -Math.atan2(sTrans.y, sTrans.x);
@@ -283,7 +283,7 @@ function init() {
     imageFlipped = new Image();
     imageFlipped.src = 'files/field.png';
     $('input').bind("change paste keyup", function () {
-        console.log("change");
+        // console.log("change");
         clearTimeout(wto);
         wto = setTimeout(function () {
             update();
@@ -374,6 +374,12 @@ function radians2degrees(rad) {
 function update() {
     clear();
     waypoints = [];
+
+    robotWidth = parseFloat($("td.robotwidth input").val());
+    robotHeight = parseFloat($("td.robotheight input").val());
+    wheelbaseWidth = parseFloat($("td.wheelbasewidth input").val());
+    wheelDiameter = parseFloat($("td.wheeldiameter input").val());
+
     points = new WaypointSequence($("tbody#points tr").length);
     eachPoint(function (x, y, theta, comment) {
         var pos = new Translation2d(x, y);
@@ -386,6 +392,7 @@ function update() {
     config.max_vel = parseFloat($("td.max_vel input").val());
     config.max_acc = parseFloat($("td.max_acc input").val());
     config.max_jerk = parseFloat($("td.max_jerk input").val());
+    maxSpeed = config.max_vel;
 
 
     if (points.getNumWaypoints() > 1) {
@@ -754,3 +761,104 @@ function getNextSpeed(prev) {
     }
     return 0;
 }
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + encodeURIComponent(cvalue) + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var cookie = document.cookie;
+    var ca = cookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = decodeURIComponent(ca[i]);
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function loadConfig() {
+    var tmp_dt = getCookie("dt");
+    var tmp_vel = getCookie("max_vel");
+    var tmp_accel = getCookie("max_acc");
+    var tmp_jerk = getCookie("max_jerk");
+    var tmp_robotwidth = getCookie("robotwidth");
+    var tmp_robotheight = getCookie("robotheight");
+    var tmp_wheelbasewidth = getCookie("wheelbasewidth");
+    var tmp_wheeldiameter = getCookie("wheeldiameter");
+    var tmp_fileheader = getCookie("fileheadertxt");
+
+    if (tmp_dt === "")
+        tmp_dt = 0.01;
+
+    if (tmp_vel === "")
+        tmp_vel = 80;
+
+    if (tmp_accel === "")
+        tmp_accel = 60;
+
+    if (tmp_jerk === "")
+        tmp_jerk = 660;
+
+    if (tmp_robotwidth === "")
+        tmp_robotwidth = 28;
+
+    if (tmp_robotheight === "")
+        tmp_robotheight = 33;
+
+    if (tmp_wheelbasewidth === "")
+        tmp_wheelbasewidth = 28;
+
+    if (tmp_wheeldiameter === "")
+        tmp_wheeldiameter = 4.875;
+
+    if (tmp_fileheader === "") {
+        tmp_fileheader = `package org.usfirst.frc.team195.robot.paths;
+ 
+import org.usfirst.frc.team195.robot.util.*;
+`;
+    }
+
+    $("td.dt input").val(tmp_dt);
+    $("td.max_vel input").val(tmp_vel);
+    $("td.max_acc input").val(tmp_accel);
+    $("td.max_jerk input").val(tmp_jerk);
+    $("td.robotwidth input").val(tmp_robotwidth);
+    $("td.robotheight input").val(tmp_robotheight);
+    $("td.wheelbasewidth input").val(tmp_wheelbasewidth);
+    $("td.wheeldiameter input").val(tmp_wheeldiameter);
+    $("td.fileheadertxt pre > code > div").text(tmp_fileheader);
+    $("td.fileheadertxt > pre").each((i, block) => {
+        hljs.highlightBlock(block);
+    });
+}
+
+function saveConfig() {
+    setCookie("dt", parseFloat($("td.dt input").val()), 365);
+    setCookie("max_vel", parseFloat($("td.max_vel input").val()), 365);
+    setCookie("max_acc", parseFloat($("td.max_acc input").val()), 365);
+    setCookie("max_jerk", parseFloat($("td.max_jerk input").val()), 365);
+}
+
+function saveRobotConfig() {
+    setCookie("robotwidth", parseFloat($("td.robotwidth input").val()), 365);
+    setCookie("robotheight", parseFloat($("td.robotheight input").val()), 365);
+    setCookie("wheelbasewidth", parseFloat($("td.wheelbasewidth input").val()), 365);
+    setCookie("wheeldiameter", parseFloat($("td.wheeldiameter input").val()), 365);
+}
+
+function saveFileConfig() {
+    setCookie("fileheadertxt", $("td.fileheadertxt pre > code > div").text(), 365);
+}
+
+$(document).ready(function(){
+    loadConfig();
+});

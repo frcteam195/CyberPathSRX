@@ -3,4 +3,4 @@ CyberPathSRX is a web app for creating and visualizing autonomous paths before e
 
 **Make sure to configure the settings for your robot at the top of files/script.js**
 
-To run it, open index.html
+Access the tool here: [https://frcteam195.github.io/CyberPathSRX/](https://frcteam195.github.io/CyberPathSRX/)

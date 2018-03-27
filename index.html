@@ -10,7 +10,7 @@
     <script src="files/filesaver.js"></script>
 	<link href="files/Roboto.css" rel="stylesheet">
 	<link href="files/SourceCodePro.css" rel="stylesheet">
-	<link rel="stylesheet" href="files/atelier-dune-dark.css">
+	<link rel="stylesheet" href="files/atelier-dune-light.css">
 	<script src="files/highlight.min.js"></script>
 	<script>hljs.sty;</script>
 	<style type="text/css">
@@ -205,9 +205,10 @@
 		<thead>
 			<th>dt (s)</th>
 			<th>Max Velocity (in/s)</th>
-			<th>Max Acceleration (in/s<sup>2</sup>)</th>
+			<th>Max Accel (in/s<sup>2</sup>)</th>
 			<th>Max Jerk (in/s<sup>3</sup>)</th>
 			<th>Elapsed Time (s)</th>
+			<th></th>
 		</thead>
 		<tbody id="config">
 			<tr>
@@ -216,7 +217,40 @@
         		<td class="max_acc"><input value="60"></td>
 				<td class="max_jerk"><input value="660"></td>
 				<td class="time">0</td>
+				<td class="saveconfig"  width="10%"><button onclick="saveConfig();">Save</button></td>
 			</tr>
+		</tbody>
+	</table>
+
+	<table>
+		<thead>
+		<th>Robot Width (in)</th>
+		<th>Robot Height (in)</th>
+		<th>Wheelbase Width (in)</th>
+		<th>Wheel Diameter (in)</th>
+		<th></th>
+		</thead>
+		<tbody id="robotConfig">
+		<tr>
+			<td class="robotwidth"><input value=""></td>
+			<td class="robotheight"><input value=""></td>
+			<td class="wheelbasewidth"><input value=""></td>
+			<td class="wheeldiameter"><input value=""></td>
+			<td class="saverobotconfig" width="10%"><button onclick="saveRobotConfig();">Save</button></td>
+		</tr>
+		</tbody>
+	</table>
+
+	<table>
+		<thead>
+		<th>File Header</th>
+		<th></th>
+		</thead>
+		<tbody id="fileConfig">
+		<tr>
+			<td class="fileheadertxt"><pre><code class="java"><div style="text-align: left;" spellcheck="false" contenteditable="true"></div></code></pre></td>
+			<td class="savefileconfig"  width="10%"><button onclick="saveFileConfig();">Save</button></td>
+		</tr>
 		</tbody>
 	</table>
 

@@ -34,7 +34,7 @@ var Spline = (function () {
         return Spline.reticulateSplines$double$double$double$double$double$double$Spline$Spline_Type(start.x, start.y, start.theta, goal.x, goal.y, goal.theta, result, type);
     };
     Spline.reticulateSplines$double$double$double$double$double$double$Spline$Spline_Type = function (x0, y0, theta0, x1, y1, theta1, result, type) {
-        console.info("Reticulating splines...");
+        // console.info("Reticulating splines...");
         result.type_ = type;
         result.x_offset_ = x0;
         result.y_offset_ = y0;
