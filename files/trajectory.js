@@ -168,7 +168,7 @@ var Spline = (function () {
     };
     Spline.prototype.angleChangeAt = function (percentage) {
         //Removed bounding to fix angle issue - previously bounded -pi to pi
-        return Math.atan(this.secondDerivativeAt(percentage));
+        return ChezyMath.boundAngleNegPiToPiRadians(Math.atan(this.secondDerivativeAt(percentage)));
     };
     Spline.prototype.toString = function () {
         return "a=" + this.a_ + "; b=" + this.b_ + "; c=" + this.c_ + "; d=" + this.d_ + "; e=" + this.e_;
