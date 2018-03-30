@@ -389,6 +389,8 @@ function update() {
     clear();
     waypoints = [];
 
+    fileHeader = $("td.fileheadertxt pre > code > div").text();
+
     robotWidth = parseFloat($("td.robotwidth input").val());
     robotHeight = parseFloat($("td.robotheight input").val());
     wheelbaseWidth = parseFloat($("td.wheelbasewidth input").val());
