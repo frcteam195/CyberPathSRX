@@ -4,6 +4,7 @@
     <list default="true" id="de9d0dfa-70c3-41df-91f0-51ce96d14413" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/files/script.js" beforeDir="false" afterPath="$PROJECT_DIR$/files/script.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/trajectory.js" beforeDir="false" afterPath="$PROJECT_DIR$/files/trajectory.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -21,20 +22,26 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="441">
-              <caret line="239" column="38" selection-start-line="239" selection-start-column="23" selection-end-line="239" selection-end-column="38" />
+            <state relative-caret-position="141">
+              <caret line="223" column="16" lean-forward="true" selection-start-line="223" selection-start-column="16" selection-end-line="223" selection-end-column="16" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="script.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="script.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/files/script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="399" column="27" lean-forward="true" selection-start-line="399" selection-start-column="27" selection-end-line="399" selection-end-column="27" />
-              <folding>
-                <element signature="e#24669#24733#0" />
-              </folding>
+            <state relative-caret-position="168">
+              <caret line="414" column="51" selection-start-line="414" selection-start-column="51" selection-end-line="414" selection-end-column="51" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="trajectory.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/files/trajectory.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="374">
+              <caret line="1023" lean-forward="true" selection-start-line="1023" selection-end-line="1023" />
             </state>
           </provider>
         </entry>
@@ -66,9 +73,9 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/files/atelier-dune-light.css" />
-        <option value="$PROJECT_DIR$/files/trajectory.js" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/files/script.js" />
+        <option value="$PROJECT_DIR$/files/trajectory.js" />
       </list>
     </option>
   </component>
@@ -122,7 +129,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -139,6 +145,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -195,12 +202,13 @@
       <workItem from="1522194899559" duration="185000" />
       <workItem from="1522441779271" duration="42000" />
       <workItem from="1523933543400" duration="13000" />
-      <workItem from="1523933581979" duration="288000" />
+      <workItem from="1523933581979" duration="1581000" />
+      <workItem from="1523935200439" duration="1437000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="27580000" />
+    <option name="totallyTimeSpent" value="30310000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
@@ -234,18 +242,22 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="21" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
+        <state relative-caret-position="3135">
+          <caret line="209" column="49" selection-start-line="209" selection-start-column="49" selection-end-line="209" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/files/trajectory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14580">
+          <caret line="972" column="32" selection-start-line="972" selection-start-column="32" selection-end-line="972" selection-end-column="32" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/files/script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5865">
-          <caret line="391" column="63" selection-start-line="391" selection-start-column="63" selection-end-line="391" selection-end-column="63" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
+        <state relative-caret-position="6150">
+          <caret line="410" column="22" lean-forward="true" selection-start-line="410" selection-start-column="22" selection-end-line="410" selection-end-column="22" />
         </state>
       </provider>
     </entry>
@@ -260,9 +272,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5865">
           <caret line="391" column="63" selection-start-line="391" selection-start-column="63" selection-end-line="391" selection-end-column="63" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="21" selection-start-line="25" selection-start-column="21" selection-end-line="25" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/files/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5865">
+          <caret line="391" column="63" selection-start-line="391" selection-start-column="63" selection-end-line="391" selection-end-column="63" />
         </state>
       </provider>
     </entry>
@@ -277,9 +300,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9510">
           <caret line="636" column="39" lean-forward="true" selection-start-line="636" selection-start-column="39" selection-end-line="636" selection-end-column="39" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -294,9 +314,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9705">
           <caret line="647" lean-forward="true" selection-start-line="647" selection-end-line="647" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -311,9 +328,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9435">
           <caret line="629" selection-start-line="629" selection-end-line="635" selection-end-column="124" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -328,9 +342,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5010">
           <caret line="334" column="5" lean-forward="true" selection-start-line="334" selection-start-column="5" selection-end-line="334" selection-end-column="5" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -345,9 +356,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5730">
           <caret line="384" column="25" lean-forward="true" selection-start-line="384" selection-start-column="25" selection-end-line="384" selection-end-column="25" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -362,9 +370,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5520">
           <caret line="370" column="7" selection-start-line="370" selection-start-column="7" selection-end-line="370" selection-end-column="7" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -379,9 +384,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6450">
           <caret line="430" column="19" lean-forward="true" selection-start-line="430" selection-start-column="19" selection-end-line="430" selection-end-column="19" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -403,9 +405,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="6450">
           <caret line="432" column="24" selection-start-line="432" selection-start-column="24" selection-end-line="432" selection-end-column="24" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -420,9 +419,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5370">
           <caret line="358" column="4" selection-start-line="358" selection-start-column="4" selection-end-line="358" selection-end-column="4" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -444,9 +440,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5445">
           <caret line="365" column="1" lean-forward="true" selection-start-line="365" selection-start-column="1" selection-end-line="365" selection-end-column="1" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -461,9 +454,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5355">
           <caret line="359" column="14" lean-forward="true" selection-start-line="359" selection-start-column="14" selection-end-line="359" selection-end-column="14" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -478,9 +468,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="8715">
           <caret line="583" column="29" lean-forward="true" selection-start-line="583" selection-start-column="29" selection-end-line="583" selection-end-column="29" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -514,27 +501,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/files/trajectory.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="175" column="18" selection-start-line="175" selection-start-column="18" selection-end-line="175" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="239" column="38" selection-start-line="239" selection-start-column="23" selection-end-line="239" selection-end-column="38" />
+        <state relative-caret-position="141">
+          <caret line="223" column="16" lean-forward="true" selection-start-line="223" selection-start-column="16" selection-end-line="223" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/files/script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="399" column="27" lean-forward="true" selection-start-line="399" selection-start-column="27" selection-end-line="399" selection-end-column="27" />
-          <folding>
-            <element signature="e#24669#24733#0" />
-          </folding>
+        <state relative-caret-position="168">
+          <caret line="414" column="51" selection-start-line="414" selection-start-column="51" selection-end-line="414" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/files/trajectory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="374">
+          <caret line="1023" lean-forward="true" selection-start-line="1023" selection-end-line="1023" />
         </state>
       </provider>
     </entry>

@@ -131,10 +131,11 @@ class Translation2d {
 }
 
 class Waypoint {
-    constructor(position, theta, comment) {
+    constructor(position, theta, comment, speed) {
         this.position = position;
         this.theta = theta;
         this.comment = comment;
+        this.speed = speed;
     }
 
     draw() {
@@ -356,6 +357,7 @@ function addPoint(x, y) {
         + "<td><input value='" + (x) + "'></td>"
         + "<td><input value='" + (y) + "'></td>"
         + "<td><input value='" + theta + "'></td>"
+        + "<td><input value='60'></td>"
         + "<td class='comments'><input placeholder='Comments'></td>"
         + "<td><button onclick='$(this).parent().parent().remove();update();'>Delete</button></td></tr>"
     );
@@ -405,12 +407,12 @@ function update() {
     //     }
 
     points = new WaypointSequence($("tbody#points tr").length);
-    eachPoint(function (x, y, theta, comment) {
+    eachPoint(function (x, y, theta, comment, speed) {
         theta = theta;
         var pos = new Translation2d(x, y);
-        waypoints.push(new Waypoint(pos, theta, comment));
+        waypoints.push(new Waypoint(pos, theta, comment, speed));
         drawRotatedRect(pos, robotHeight, robotWidth, -theta, getColorForSpeed(10), "rgba(0,0,0,0)", false);
-        points.addWaypoint(new WaypointSequence.Waypoint(x, y, theta));
+        points.addWaypoint(new WaypointSequence.Waypoint(x, y, theta, speed));
     });
 
     config = new TrajectoryGenerator.Config();
@@ -520,8 +522,12 @@ function eachPoint(func) {
             theta = 0.0;
         }
         theta = degrees2radians(theta);
-        var comment = ($($($(this).children()).children()[3]).val())
-        func(x, y, theta, comment);
+        var speed = parseInt($($($(this).children()).children()[3]).val());
+        if (isNaN(y)) {
+            y = 0;
+        }
+        var comment = ($($($(this).children()).children()[4]).val())
+        func(x, y, theta, comment, speed);
     });
 }
 
@@ -594,12 +600,13 @@ function importData() {
             waypoints = []
             $("tbody#points").empty();
             jd.forEach((wpd, i) => {
-                let wp = new Waypoint(new Translation2d(wpd.position.x, wpd.position.y), radians2degrees(wpd.theta), wpd.comment);
+                let wp = new Waypoint(new Translation2d(wpd.position.x, wpd.position.y), radians2degrees(wpd.theta), wpd.comment, wpd.speed);
                 // console.log(wp);
                 $("tbody#points").append("<tr>"
                     + "<td><input value='" + wp.position.x + "'></td>"
                     + "<td><input value='" + wp.position.y + "'></td>"
                     + "<td><input value='" + radians2degrees(wpd.theta) + "'></td>"
+                    + "<td><input value='" + wp.speed + "'></td>"
                     + "<td class='comments'><input placeholder='Comments' value='" + wp.comment + "'></td>"
                     + (i == 0 ? "" : "<td><button onclick='$(this).parent().parent().remove();update();''>Delete</button></td></tr>")
                 );

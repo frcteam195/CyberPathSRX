@@ -936,7 +936,7 @@ var WaypointSequence = (function () {
 WaypointSequence["__class"] = "WaypointSequence";
 (function (WaypointSequence) {
     var Waypoint = (function () {
-        function Waypoint(x, y, theta) {
+        function Waypoint(x, y, theta, speed) {
             var _this = this;
             if (((typeof x === 'number') || x === null) && ((typeof y === 'number') || y === null) && ((typeof theta === 'number') || theta === null)) {
                 var __args = Array.prototype.slice.call(arguments);
@@ -969,6 +969,8 @@ WaypointSequence["__class"] = "WaypointSequence";
             }
             else
                 throw new Error('invalid overload');
+
+            _this.speed = speed;
         }
         return Waypoint;
     }());
@@ -1011,7 +1013,28 @@ var PathGenerator = (function () {
             total_distance += spline_lengths[i];
         }
         ;
-        var traj = TrajectoryGenerator.generate(config, TrajectoryGenerator.SCurvesStrategy_$LI$(), 0.0, path.getWaypoint(0).theta, total_distance, 0.0, path.getWaypoint(path.getNumWaypoints() - 1).theta);
+        var distance = spline_lengths[0];
+        //(config, strategy,
+        // start_vel, start_heading, goal_pos, goal_vel, goal_heading)
+        var traj = TrajectoryGenerator.generate(config, TrajectoryGenerator.TrapezoidalStrategy_$LI$(),
+                                                0.0, path.getWaypoint(0).theta, distance, path.getWaypoint(1).speed, path.getWaypoint(1).theta);
+
+        for (var i = 2; i < path.getNumWaypoints(); ++i) {
+            distance += spline_lengths[i - 1];
+
+            var speed = (i == path.getNumWaypoints() - 1) ? 0 : path.getWaypoint(i).speed;
+
+            traj.append(
+                TrajectoryGenerator.generate(
+                    config,
+                    TrajectoryGenerator.TrapezoidalStrategy_$LI$(),
+                    traj.getSegment(traj.getNumSegments() - 1).vel,
+                    traj.getSegment(traj.getNumSegments() - 1).theta,
+                    distance,
+                    speed,
+                    path.getWaypoint(i).theta));
+        }
+
         var cur_spline = 0;
         var cur_spline_start_pos = 0;
         var length_of_splines_finished = 0;
