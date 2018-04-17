@@ -395,6 +395,7 @@ function update() {
     robotHeight = parseFloat($("td.robotheight input").val());
     wheelbaseWidth = parseFloat($("td.wheelbasewidth input").val());
     wheelDiameter = parseFloat($("td.wheeldiameter input").val());
+    kEncoderCountsPerRev = parseFloat($("td.encoderticksrev input").val());
 
     // var angleOffset = 0;
     // if ($("tbody#points tr").length > 1)
@@ -833,6 +834,7 @@ function loadConfig() {
     var tmp_robotheight = getCookie("robotheight");
     var tmp_wheelbasewidth = getCookie("wheelbasewidth");
     var tmp_wheeldiameter = getCookie("wheeldiameter");
+    var tmp_encoderticksrev = getCookie("encoderticksrev");
     var tmp_fileheader = getCookie("fileheadertxt");
 
     if (tmp_dt === "")
@@ -859,6 +861,9 @@ function loadConfig() {
     if (tmp_wheeldiameter === "")
         tmp_wheeldiameter = 4.875;
 
+    if (tmp_encoderticksrev === "")
+        tmp_encoderticksrev = 4096;
+
     if (tmp_fileheader === "") {
         tmp_fileheader = `package org.usfirst.frc.team195.robot.paths;
  
@@ -874,6 +879,7 @@ import org.usfirst.frc.team195.robot.util.*;
     $("td.robotheight input").val(tmp_robotheight);
     $("td.wheelbasewidth input").val(tmp_wheelbasewidth);
     $("td.wheeldiameter input").val(tmp_wheeldiameter);
+    $("td.encoderticksrev input").val(tmp_encoderticksrev);
     $("td.fileheadertxt pre > code > div").text(tmp_fileheader);
     $("td.fileheadertxt > pre").each((i, block) => {
         hljs.highlightBlock(block);
@@ -892,6 +898,7 @@ function saveRobotConfig() {
     setCookie("robotheight", parseFloat($("td.robotheight input").val()), 365);
     setCookie("wheelbasewidth", parseFloat($("td.wheelbasewidth input").val()), 365);
     setCookie("wheeldiameter", parseFloat($("td.wheeldiameter input").val()), 365);
+    setCookie("encoderticksrev", parseFloat($("td.encoderticksrev input").val()), 365);
 }
 
 function saveFileConfig() {
